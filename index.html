@@ -1,35 +1,289 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOID | Minimal Experience</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #000; color: #f1f1f1; font-family: sans-serif; line-height: 1.7; overflow-x: hidden; }
-        nav { padding: 2.4rem 5%; display: flex; justify-content: space-between; }
-        .hero { padding: 10% 5%; }
-        .hero-title { font-size: 3rem; margin-bottom: 1rem; }
-        .hero-desc { color: #777; margin-bottom: 2rem; }
-        .about-img { width: 100%; max-width: 800px; display: block; margin: 0 auto; }
-        .nav-links a { color: #fff; text-decoration: none; margin-left: 1rem; }
-    </style>
-</head>
-<body>
-    <nav>
-        <div class="logo">VOID</div>
-        <div class="nav-links">
-            <a href="#">首页</a>
-            <a href="#">联系</a>
+FRACTURE｜暗黑3D断层几何官网（第五款全新独家）<!DOCTYPE<html lang="<head
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    FRACTURE | 3D Geometric Dark<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+:root {
+--bg: #000000;
+--primary: #7c68ff;
+--light: #eeeeee;
+--muted: #888888;
+}
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+background: var(--bg);
+color: var(--light);
+font-family: 'Segoe UI', sans-serif;
+overflow-x: hidden;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: var(--primary); }
+
+/* 导航 悬浮极简 */
+nav {
+position: fixed;
+top: 0;
+width: 100%;
+padding: 2rem 6%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+z-index: 999;
+}
+
+.logo {
+font-size: 1.4rem;
+letter-spacing: 3px;
+color: var(--primary);
+font-weight: 600;
+}
+
+.nav-links a {
+color: var(--muted);
+text-decoration: none;
+margin-left: 2rem;
+font-size: 0.9rem;
+transition: 0.3s;
+}
+
+.nav-links a:hover {
+color: var(--primary);
+}
+
+/* 核心独家：3D 断层破碎首屏布局 */
+.hero {
+width: 100%;
+height: 100vh;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 6%;
+}
+
+/* 左右断层几何色块 /
+.hero-shape-left {
+position: absolute;
+top: 0;
+left: 0;
+width: 52%;
+height: 100%;
+background: #050505;
+/ 独家斜切破碎角度 */
+clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+z-index: 1;
+}
+
+.hero-shape-right {
+position: absolute;
+top: 0;
+right: 0;
+width: 52%;
+height: 100%;
+background: url("https://aka.doubaocdn.com/s/vtXp1wiyBk") center top / cover no-repeat;
+clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* 文字层级 */
+.hero-text {
+position: relative;
+z-index: 2;
+max-width: 500px;
+}
+
+.hero-tag {
+color: var(--primary);
+letter-spacing: 4px;
+font-size: 0.8rem;
+margin-bottom: 1.2rem;
+text-transform: uppercase;
+}
+
+.hero-title {
+font-size: 4.2rem;
+line-height: 1.1;
+margin-bottom: 1.8rem;
+}
+
+.hero-title span {
+color: var(--primary);
+}
+
+.hero-desc {
+color: var(--muted);
+line-height: 1.8;
+margin-bottom: 2.5rem;
+}
+
+.hero-btn {
+padding: 12px 34px;
+border: 1px solid var(--primary);
+color: var(--primary);
+text-decoration: none;
+font-size: 0.9rem;
+transition: 0.3s ease;
+}
+
+.hero-btn:hover {
+background: var(--primary);
+color: #000;
+box-shadow: 0 0 20px #7c68ff40;
+}
+
+/* 断层分割区域 */
+.fracture-space {
+height: 120px;
+position: relative;
+background: #000;
+}
+
+.slant-line {
+position: absolute;
+width: 100%;
+height: 1px;
+background: linear-gradient(90deg, transparent, #7c68ff30, transparent);
+transform: skewX(-20deg);
+}
+
+/* 几何卡片区域 */
+.cards-section {
+padding: 4rem 6% 8rem;
+display: grid;
+grid-template-columns: repeat(3,1fr);
+gap: 1.5rem;
+}
+
+.geo-card {
+padding: 2.5rem 2rem;
+background: #070707;
+border: 1px solid #151515;
+transition: 0.4s ease;
+clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%);
+}
+
+.geo-card:hover {
+border-color: #7c68ff40;
+transform: translateY(-6px);
+}
+
+.geo-card h3 {
+font-size: 1.3rem;
+margin-bottom: 1rem;
+}
+
+.geo-card p {
+color: var(--muted);
+font-size: 0.9rem;
+line-height: 1.7;
+}
+
+/* 作品不规则网格 */
+.works {
+padding: 0 6% 8rem;
+display: grid;
+grid-template-columns: 1.4fr 1fr;
+gap: 1.5rem;
+}
+
+.work-big {
+height: 460px;
+background: url("https://aka.doubaocdn.com/s/bnGb1wixwz") center/cover;
+clip-path: polygon(0 0, 100% 0, 100% 100%, 4% 100%);
+}
+
+.work-stack {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.work-small-1 {
+height: 220px;
+background: url("https://aka.doubaocdn.com/s/M7Gk1wixmO") center/cover;
+clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%);
+}
+
+.work-small-2 {
+height: 220px;
+background: url("https://aka.doubaocdn.com/s/50rR1wiyjF") center/cover;
+clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* 页脚 */
+footer {
+padding: 3rem 6%;
+border-top: 1px solid #111;
+text-align: center;
+color: #555;
+font-size: 0.9rem;
+}
+
+/* 移动端适配 */
+@media(max-width:900px){
+.hero-shape-left,.hero-shape-right{
+clip-path: none;
+width:100%;
+}
+.hero-shape-right{
+opacity:0.25;
+}
+.hero-title{
+font-size:2.6rem;
+}
+.cards-section{
+grid-template-columns:1fr 1fr;
+}
+.works{
+grid-template-columns:1fr;
+}
+.nav-links{
+display:none;
+}
+}
+@media(max-width:550px){
+.cards-section{
+grid-template-columns:1fr;
+}
+.hero-title{
+font-size:2rem;
+}
+<body<section class="
+<div class="hero-shape
+
+   <div class="hero-text<div class="hero-tag">3D GEOMETRIC AEST</div><h1 class="hero-title">
+               <br>
+<span>解构视觉</span>
+            </h1>
+            <p class="hero-desc">
+                打破规整构图，用断层、斜切、几何重构视觉秩序。不规则，才是最独特的高级质感。
+</p>
+           <a href="#" class="hero-btn">探索更多</div</section><!-- 斜切断层分割线 -->
+   <section class="fracture-space">
+        <div class="slant-line"></section<!-- 几何卡片区 -->
+    <section class="cards-section"><div class="geo-card">
+            <h3>断层美学</h3>
+            <p>以不规则斜切结构打破传统网页框架，视觉冲击力极强，独一无二版式</p>
         </div>
-    </nav>
+        <div class="geo-card"><h3></h3<p>低饱和紫蓝高光点缀纯黑底色，冷感、高级、先锋、小众</p>
+        </div>
+        <div class="geo-card"><h3></h3><p>平面做出3D断层效果，无需JS，纯CSS实现高级立体视觉。</div></section>
 
-    <div class="hero">
-        <h1 class="hero-title">自成山海</h1>
-        <p class="hero-desc">剔除多余修饰，留存本质姿态。极简，是最高级的克制与自由。</p>
-        <a href="#" style="color:#fff;">深入探索</a>
-    </div>
+<!-- 不规则作品网格<section class="works">
+        <div class="work-big"></div>
+        <div class="work-stack"><div class="</div<div class="work-small-2"></div</section><!-- 页脚<footer>
+        FRACTURE © 2026 ｜ Deconstructed Visual Design</footer>
 
-    <img class="about-img" src="https://aka.doubaocdn.com/s/bnGb1wixwz" alt="质感人像">
-</body>
 </html>
+```
