@@ -1,289 +1,249 @@
-FRACTURE｜暗黑3D断层几何官网（第五款全新独家）<!DOCTYPE<html lang="<head
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    FRACTURE | 3D Geometric Dark<style>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 锁屏</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
-:root {
---bg: #000000;
---primary: #7c68ff;
---light: #eeeeee;
---muted: #888888;
-}
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            /* Windows 11 默认锁屏背景 */
+            background: url('https://picsum.photos/id/1039/1920/1080') center/cover no-repeat;
+            position: relative;
+            cursor: default;
+            user-select: none;
+        }
 
-html {
-scroll-behavior: smooth;
-}
+        /* 背景遮罩，和真实锁屏一致 */
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+        }
 
-body {
-background: var(--bg);
-color: var(--light);
-font-family: 'Segoe UI', sans-serif;
-overflow-x: hidden;
-}
+        /* 左下角时间日期 */
+        .time-area {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            color: #ffffff;
+            z-index: 10;
+        }
 
-/* 自定义滚动条 */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: var(--primary); }
+        .time {
+            font-size: 72px;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
 
-/* 导航 悬浮极简 */
-nav {
-position: fixed;
-top: 0;
-width: 100%;
-padding: 2rem 6%;
-display: flex;
-justify-content: space-between;
-align-items: center;
-z-index: 999;
-}
+        .date {
+            font-size: 20px;
+            font-weight: 400;
+            opacity: 0.95;
+        }
 
-.logo {
-font-size: 1.4rem;
-letter-spacing: 3px;
-color: var(--primary);
-font-weight: 600;
-}
+        /* 右下角系统图标 */
+        .system-icons {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            color: #ffffff;
+            font-size: 18px;
+            opacity: 0.9;
+            z-index: 10;
+        }
 
-.nav-links a {
-color: var(--muted);
-text-decoration: none;
-margin-left: 2rem;
-font-size: 0.9rem;
-transition: 0.3s;
-}
+        /* 登录区域 */
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%);
+            text-align: center;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
 
-.nav-links a:hover {
-color: var(--primary);
-}
+        .login-container.show {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
 
-/* 核心独家：3D 断层破碎首屏布局 */
-.hero {
-width: 100%;
-height: 100vh;
-position: relative;
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 0 6%;
-}
+        /* 用户头像 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: url('https://aka.doubaocdn.com/s/vtXp1wiyBk') center/cover;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
 
-/* 左右断层几何色块 /
-.hero-shape-left {
-position: absolute;
-top: 0;
-left: 0;
-width: 52%;
-height: 100%;
-background: #050505;
-/ 独家斜切破碎角度 */
-clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
-z-index: 1;
-}
+        .username {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
 
-.hero-shape-right {
-position: absolute;
-top: 0;
-right: 0;
-width: 52%;
-height: 100%;
-background: url("https://aka.doubaocdn.com/s/vtXp1wiyBk") center top / cover no-repeat;
-clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
-}
+        /* 密码输入框 */
+        .password-input {
+            width: 320px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+        }
 
-/* 文字层级 */
-.hero-text {
-position: relative;
-z-index: 2;
-max-width: 500px;
-}
+        .password-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
 
-.hero-tag {
-color: var(--primary);
-letter-spacing: 4px;
-font-size: 0.8rem;
-margin-bottom: 1.2rem;
-text-transform: uppercase;
-}
+        .password-input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-.hero-title {
-font-size: 4.2rem;
-line-height: 1.1;
-margin-bottom: 1.8rem;
-}
+        /* 登录按钮 */
+        .login-btn {
+            width: 320px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
 
-.hero-title span {
-color: var(--primary);
-}
+        .login-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
 
-.hero-desc {
-color: var(--muted);
-line-height: 1.8;
-margin-bottom: 2.5rem;
-}
+        .login-btn:active {
+            transform: scale(0.99);
+        }
 
-.hero-btn {
-padding: 12px 34px;
-border: 1px solid var(--primary);
-color: var(--primary);
-text-decoration: none;
-font-size: 0.9rem;
-transition: 0.3s ease;
-}
+        /* 提示文字 */
+        .hint {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
 
-.hero-btn:hover {
-background: var(--primary);
-color: #000;
-box-shadow: 0 0 20px #7c68ff40;
-}
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
 
-/* 断层分割区域 */
-.fracture-space {
-height: 120px;
-position: relative;
-background: #000;
-}
+        /* 登录成功动画 */
+        .success-overlay {
+            position: absolute;
+            inset: 0;
+            background: #000000;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
 
-.slant-line {
-position: absolute;
-width: 100%;
-height: 1px;
-background: linear-gradient(90deg, transparent, #7c68ff30, transparent);
-transform: skewX(-20deg);
-}
+        .success-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body onclick="showLogin()">
 
-/* 几何卡片区域 */
-.cards-section {
-padding: 4rem 6% 8rem;
-display: grid;
-grid-template-columns: repeat(3,1fr);
-gap: 1.5rem;
-}
+    <div class="overlay"></div>
 
-.geo-card {
-padding: 2.5rem 2rem;
-background: #070707;
-border: 1px solid #151515;
-transition: 0.4s ease;
-clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%);
-}
+    <!-- 时间日期 -->
+    <div class="time-area">
+        <div class="time" id="time">00:00</div>
+        <div class="date" id="date">2026年1月1日 星期四</div>
+    </div>
 
-.geo-card:hover {
-border-color: #7c68ff40;
-transform: translateY(-6px);
-}
+    <!-- 右下角系统图标 -->
+    <div class="system-icons">
+        <span>🔊</span>
+        <span>📶</span>
+        <span>🔋</span>
+    </div>
 
-.geo-card h3 {
-font-size: 1.3rem;
-margin-bottom: 1rem;
-}
+    <!-- 点击提示 -->
+    <div class="hint" id="hint">点击任意处解锁</div>
 
-.geo-card p {
-color: var(--muted);
-font-size: 0.9rem;
-line-height: 1.7;
-}
+    <!-- 登录区域 -->
+    <div class="login-container" id="loginBox">
+        <div class="avatar"></div>
+        <div class="username">用户</div>
+        <input type="password" class="password-input" placeholder="密码" onclick="event.stopPropagation()">
+        <button class="login-btn" onclick="login(event)">登录</button>
+    </div>
 
-/* 作品不规则网格 */
-.works {
-padding: 0 6% 8rem;
-display: grid;
-grid-template-columns: 1.4fr 1fr;
-gap: 1.5rem;
-}
+    <!-- 登录成功遮罩 -->
+    <div class="success-overlay" id="successOverlay"></div>
 
-.work-big {
-height: 460px;
-background: url("https://aka.doubaocdn.com/s/bnGb1wixwz") center/cover;
-clip-path: polygon(0 0, 100% 0, 100% 100%, 4% 100%);
-}
+    <script>
+        // 实时更新时间日期
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}`;
 
-.work-stack {
-display: flex;
-flex-direction: column;
-gap: 1.5rem;
-}
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
+            document.getElementById('date').textContent = `${year}年${month}月${day}日 ${week}`;
+        }
 
-.work-small-1 {
-height: 220px;
-background: url("https://aka.doubaocdn.com/s/M7Gk1wixmO") center/cover;
-clip-path: polygon(0 0, 100% 0, 100% 96%, 0 100%);
-}
+        updateTime();
+        setInterval(updateTime, 1000);
 
-.work-small-2 {
-height: 220px;
-background: url("https://aka.doubaocdn.com/s/50rR1wiyjF") center/cover;
-clip-path: polygon(0 4%, 100% 0, 100% 100%, 0 100%);
-}
+        // 显示登录框
+        function showLogin() {
+            document.getElementById('loginBox').classList.add('show');
+            document.getElementById('hint').style.display = 'none';
+        }
 
-/* 页脚 */
-footer {
-padding: 3rem 6%;
-border-top: 1px solid #111;
-text-align: center;
-color: #555;
-font-size: 0.9rem;
-}
+        // 登录模拟
+        function login(e) {
+            e.stopPropagation();
+            document.getElementById('successOverlay').classList.add('show');
+            setTimeout(() => {
+                alert('登录成功！（这是伪装网页演示）');
+                document.getElementById('successOverlay').classList.remove('show');
+            }, 800);
+        }
+    </script>
 
-/* 移动端适配 */
-@media(max-width:900px){
-.hero-shape-left,.hero-shape-right{
-clip-path: none;
-width:100%;
-}
-.hero-shape-right{
-opacity:0.25;
-}
-.hero-title{
-font-size:2.6rem;
-}
-.cards-section{
-grid-template-columns:1fr 1fr;
-}
-.works{
-grid-template-columns:1fr;
-}
-.nav-links{
-display:none;
-}
-}
-@media(max-width:550px){
-.cards-section{
-grid-template-columns:1fr;
-}
-.hero-title{
-font-size:2rem;
-}
-<body<section class="
-<div class="hero-shape
-
-   <div class="hero-text<div class="hero-tag">3D GEOMETRIC AEST</div><h1 class="hero-title">
-               <br>
-<span>解构视觉</span>
-            </h1>
-            <p class="hero-desc">
-                打破规整构图，用断层、斜切、几何重构视觉秩序。不规则，才是最独特的高级质感。
-</p>
-           <a href="#" class="hero-btn">探索更多</div</section><!-- 斜切断层分割线 -->
-   <section class="fracture-space">
-        <div class="slant-line"></section<!-- 几何卡片区 -->
-    <section class="cards-section"><div class="geo-card">
-            <h3>断层美学</h3>
-            <p>以不规则斜切结构打破传统网页框架，视觉冲击力极强，独一无二版式</p>
-        </div>
-        <div class="geo-card"><h3></h3<p>低饱和紫蓝高光点缀纯黑底色，冷感、高级、先锋、小众</p>
-        </div>
-        <div class="geo-card"><h3></h3><p>平面做出3D断层效果，无需JS，纯CSS实现高级立体视觉。</div></section>
-
-<!-- 不规则作品网格<section class="works">
-        <div class="work-big"></div>
-        <div class="work-stack"><div class="</div<div class="work-small-2"></div</section><!-- 页脚<footer>
-        FRACTURE © 2026 ｜ Deconstructed Visual Design</footer>
-
+</body>
 </html>
-```
