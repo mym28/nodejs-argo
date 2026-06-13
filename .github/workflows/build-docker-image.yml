@@ -1,54 +1,44 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VOID // ARCHIVE</title>
-    <style>
-        :root { --bg: #050505; --text: #e0e0e0; --accent: #888; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; overflow-x: hidden; }
-        
-        /* 页面入场动画 */
-        .container { opacity: 0; animation: fadeIn 1.5s ease-out forwards; }
-        @keyframes fadeIn { to { opacity: 1; } }
+name: Build and Push Docker Image
 
-        /* 全屏布局 */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 10%; }
-        .hero h1 { font-size: 6vw; font-weight: 200; letter-spacing: -2px; margin-bottom: 2rem; }
-        .hero p { color: var(--accent); max-width: 400px; font-size: 1.1rem; line-height: 1.6; }
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
-        /* 底部锚点 */
-        .footer { position: fixed; bottom: 5%; left: 10%; display: flex; gap: 3rem; color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; }
-        
-        /* 装饰性背景图 */
-        .bg-overlay { position: fixed; top: 0; right: 0; width: 40%; height: 100%; background: url("https://aka.doubaocdn.com/s/vtXp1wiyBk") center/cover; opacity: 0.3; filter: grayscale(1); z-index: -1; }
-    </style>
-</head>
-<body>
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
-    <div class="bg-overlay"></div>
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
-    <div class="container">
-        <section class="hero">
-            <h1>VOID_</h1>
-            <p>一切不可言说的，皆为本质。在秩序与混沌的边界，构建纯粹的数字静默。</p>
-        </section>
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-        <footer class="footer">
-            <div>Status: Online</div>
-            <div>Mode: Silent</div>
-            <div>Auth: 2026</div>
-        </footer>
-    </div>
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
-    <script>
-        // 轻微交互：鼠标移动产生视觉偏移
-        document.addEventListener('mousemove', (e) => {
-            const overlay = document.querySelector('.bg-overlay');
-            const x = e.clientX / window.innerWidth;
-            overlay.style.transform = `scale(1.05) translateX(${x * 20}px)`;
-        });
-    </script>
-</body>
-</html>
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/mym88:mym
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=HTTP Server
+            org.opencontainers.image.licenses=MIT
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
